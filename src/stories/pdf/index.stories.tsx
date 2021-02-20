@@ -1,6 +1,15 @@
 import React, { useState } from 'react';
 // also exported from '@storybook/react' if you can deal with breaking changes in 6.1
 import { Story, Meta } from '@storybook/react/types-6-0';
+import {
+  Title,
+  Subtitle,
+  Description,
+  Primary,
+  ArgsTable,
+  Stories,
+  PRIMARY_STORY,
+} from '@storybook/addon-docs/blocks';
 
 import { DocumentProps, PageProps } from 'react-pdf';
 import { Document, Page } from 'react-pdf/dist/esm/entry.webpack';
@@ -9,10 +18,10 @@ import './index.scss';
 import sample from './sample.pdf';
 
 export default {
-  title: 'react-demos/pdf',
+  title: 'react-demos/pdf-viewer',
   component: Document,
   argTypes: {
-    file: { control: 'text' },
+    file: { control: 'text', description: '文件地址' },
   },
 } as Meta;
 
@@ -29,23 +38,23 @@ const Template: Story<DocumentProps> = (args) => {
 
   return (
     <div className='document'>
-    <Document
-      file={args.file}
-      onLoadSuccess={onDocumentLoadSuccess}
-      options={options}
-    >
-      {
-        Array.from(
-          new Array(numPages),
-          (el, index) => (
-            <Page
-              key={`page_${index + 1}`}
-              pageNumber={index + 1}
-            />
-          ),
-        )
-      }
-    </Document>
+      <Document
+        file={args.file}
+        onLoadSuccess={onDocumentLoadSuccess}
+        options={options}
+      >
+        {
+          Array.from(
+            new Array(numPages),
+            (el, index) => (
+              <Page
+                key={`page_${index + 1}`}
+                pageNumber={index + 1}
+              />
+            ),
+          )
+        }
+      </Document>
     </div>
   )
 };
@@ -54,3 +63,4 @@ export const Generic = Template.bind({});
 Generic.args = {
   file: sample,
 };
+Generic.storyName = 'generic';

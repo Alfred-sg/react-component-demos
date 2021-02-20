@@ -12,6 +12,7 @@
   "author": "alfred",
   "license": "MIT",
   "dependencies": {
+    "@storybook/addon-docs": "^6.1.18",
     "react-pdf": "^5.2.0",
     "sass": "^1.32.7"
   },
