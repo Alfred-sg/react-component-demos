@@ -1,0 +1,13 @@
+.react-pdf {
+
+}
+
+.react-pdf-loading {
+  text-align: center;
+}
+
+.react-pdf-page-canvas {
+  max-width: calc(100% - 2em);
+  box-shadow: 0 0 8px rgb(0 0 0 / 50%);
+  margin: 1em auto;
+}
