@@ -9,12 +9,9 @@ pdfjs.workerSrc = workerSrc;
 type PdfProps = {
   content?: string;
   file?: string;
-  loading?: any;
-  page?: number;
   scale?: number;
   rotate?: number;
   onDocumentComplete?: (numPages: number) => void;
-  onPageComplete?: (currentPage: number) => void;
   style?: object;
 };
 
@@ -43,7 +40,6 @@ const getDocumentByByteArray = (byteArray: any) => {
 
 class Pdf extends Component<PdfProps> {
   static defaultProps = { 
-    page: 1, 
     scale: 1.0, 
     rotate: 0 
   };
@@ -101,7 +97,7 @@ class Pdf extends Component<PdfProps> {
 
   render() {
     const { pdf } = this.state;
-    const { loading, style, scale, rotate } = this.props;
+    const { style, scale, rotate } = this.props;
 
     return pdf ? (
       <div 
@@ -122,7 +118,7 @@ class Pdf extends Component<PdfProps> {
           );
         })}
       </div>
-    ) : loading || <div className="react-pdf-loading">PDF 文件加载中...</div>;
+    ) : <div className="react-pdf-loading">PDF 文件加载中...</div>;
   }
 }
 

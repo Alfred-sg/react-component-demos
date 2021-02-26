@@ -11,16 +11,13 @@ import {
   Primary,
 } from '@storybook/addon-docs/blocks';
 
-import Pdf from './Pdf';
-import sample from './sample.pdf';
+import Watermark from './Watermark';
 
 export default {
-  title: 'react-demos/pdfjs-dist',
-  component: Pdf,
+  title: 'react-demos/watermark',
+  component: Watermark,
   argTypes: {
-    file: { control: { type: 'text' }, description: 'pdf 文件地址或内容' },
-    scale: { control: { type: 'text' }, description: '缩放' },
-    rotate: { control: { type: 'text' }, description: '旋转' },
+    text: { control: { type: 'text' }, description: '文本内容' },
   },
   parameters: {
     docs: {
@@ -29,18 +26,9 @@ export default {
       },
       page: () => (
         <>
-          <Title>pdf 浏览</Title>
+          <Title>canvas 水印</Title>
           <Subtitle />
           <Description />
-          <div>
-            基于 
-            <a href="https://github.com/wojtekmaj/react-pdf" target="_blank">
-              pdfjs-dist
-            </a> 
-            渲染 pdf 文件。
-            
-            在不支持 Promise、ReadableStream 的浏览器中，需要使用降级 es5 版本。本例即用此。
-          </div>
           <Primary />
           {/* ArgsTable 参数列表 */}
           <ArgsTable story={PRIMARY_STORY} />
@@ -53,17 +41,15 @@ export default {
 
 const Template: Story<any> = (args) => {
   return (
-    <div className='document'>
-      <Pdf
-        file={args.file}
-        page={1}
-      />
-    </div>
-  )
+    <Watermark
+      text={args.text}
+    />
+  );
 };
 
 export const Generic = Template.bind({});
 Generic.args = {
-  file: sample,
+  text: '这是我要的水印效果',
+  showPagination: true,
 };
 Generic.storyName = 'generic';
