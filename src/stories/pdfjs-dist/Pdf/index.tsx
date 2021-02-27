@@ -104,7 +104,7 @@ class Pdf extends Component<PdfProps> {
         className="react-pdf" 
         style={style} 
       >
-        {Array.from(new Array(4), (el, index) => {
+        {Array.from(new Array(pdf._pdfInfo.numPages), (el, index) => {
           const currentPage = index + 1;
 
           return (
