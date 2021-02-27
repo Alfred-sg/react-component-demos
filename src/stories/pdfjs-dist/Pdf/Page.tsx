@@ -1,4 +1,5 @@
 import React, { Component } from 'react';
+import styles from './index.scss';
 
 type InternalPageProps = {
   page: any;
@@ -8,6 +9,8 @@ type InternalPageProps = {
   onRenderSuccess?: (file: any) => any;
   onRenderError?: (file: any) => any;
 };
+
+const pixelRatio = window.devicePixelRatio || 1;
 
 const makePageCallback = (page, scale) => {
   Object.defineProperty(page, 'width', { get() { return this.view[2] * scale; }, configurable: true });
@@ -86,20 +89,25 @@ class InternalPage extends Component<InternalPageProps> {
     const canvas = this.canvas;
     const { page, scale, rotate, renderInteractiveForms } = this.props;
     if (canvas && page) {
+      const renderViewport = page.getViewport({ 
+        scale: scale ? scale * pixelRatio : scale, 
+        rotation: rotate 
+      });
+
       const viewport = page.getViewport({
         scale: scale, 
         rotation: rotate,
       });
 
-      canvas.height = viewport.height;
-      canvas.width = viewport.width;
+      canvas.height = renderViewport.height;
+      canvas.width = renderViewport.width;
 
       canvas.style.width = `${Math.floor(viewport.width)}px`;
       canvas.style.height = `${Math.floor(viewport.height)}px`;
 
       this.renderer = page.render({ 
         canvasContext: canvas.getContext('2d'), 
-        viewport,
+        viewport: renderViewport,
         renderInteractiveForms,
       });
 
@@ -112,7 +120,7 @@ class InternalPage extends Component<InternalPageProps> {
   render() {
     return (
       <canvas 
-        className="react-pdf-page-canvas"
+        className={styles["react-pdf-page-canvas"]}
         dir="ltr"
         ref={(el: HTMLCanvasElement) => this.canvas = el} 
         style={{
@@ -155,6 +163,8 @@ class Page extends Component<PageProps> {
 
   loadPage(){
     const { pdf, pageNum } = this.props;
+    console.log(pdf)
+    console.log(pageNum)
     pdf.getPage(pageNum).then(page => {
       this.setState({
         page,
