@@ -1,13 +1,22 @@
 .react-pdf {
+  padding: 16px 0;
 
+  .react-pdf-page-canvas:first-child {
+    margin-top: 0;
+  }
+
+  .react-pdf-page-canvas:last-child {
+    margin-bottom: 0;
+  }
 }
 
 .react-pdf-loading {
+  padding: 16px;
   text-align: center;
 }
 
 .react-pdf-page-canvas {
-  max-width: calc(100% - 2em);
+  max-width: calc(100% - 32px);
   box-shadow: 0 0 8px rgb(0 0 0 / 50%);
-  margin: 1em auto;
+  margin: 16px auto;
 }
