@@ -11,7 +11,7 @@ import {
   Primary,
 } from '@storybook/addon-docs/blocks';
 
-import Watermark from './Watermark';
+import Watermark from '../../Watermark';
 
 export default {
   title: 'react-demos/watermark',
