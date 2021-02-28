@@ -1,0 +1,14 @@
+.overflowed-minimap-wrap {
+  display: inline-block;
+  padding: 4px;
+  background: rgba(24, 129, 225, 0.1);
+  border: 1px solid #1881E1;
+  position: relative;
+  overflow: hidden;
+}
+
+.overflowed-minimap {
+  position: absolute;
+  z-index: 1;
+  margin: 4px;
+}

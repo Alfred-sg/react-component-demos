@@ -1,0 +1,12 @@
+.minmap-container {
+}
+
+.minmap-scroll-container {
+  position: relative;
+  width: 100%;
+  height: 100%;
+
+  .minmap-scroll-content {
+    position: absolute;
+  }
+}
