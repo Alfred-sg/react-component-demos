@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, Fragment } from 'react';
 // also exported from '@storybook/react' if you can deal with breaking changes in 6.1
 import { Story, Meta } from '@storybook/react/types-6-0';
 import {
@@ -42,7 +42,7 @@ export default {
   },
 } as Meta;
 
-const Template: Story<any> = (args) => {
+const Nodes = () => {
   const [state, setState] = useState({
     random1: {left: 10, top: 10},
     random2: {left: 1000, top: 100},
@@ -53,23 +53,23 @@ const Template: Story<any> = (args) => {
     return Math.round(Math.random() * max)
   };
 
-  useEffect(() => {
-    setInterval(() => {
-      setState({
-        random1: {left: random(3000), top: random(100)},
-        random2: {left: random(3000), top: random(100)},
-        random3: {left: random(3000), top: random(100)},
-      })
-    }, 2000)
-  }, []);
+  // useEffect(() => {
+  //   setInterval(() => {
+  //     setState({
+  //       random1: {left: random(3000), top: random(100)},
+  //       random2: {left: random(3000), top: random(100)},
+  //       random3: {left: random(3000), top: random(100)},
+  //     })
+  //   }, 2000)
+  // }, []);
 
   return (
-    <MiniMapContextWrapper>
+    <Fragment>
       <MiniMap
         selector=".box"
       />
       <Wrapper>
-      <Dark />
+        <Dark />
         <Yellow className="pos-rlt" style={state.random1}/>
         <Red className="pos-rlt" style={{width: "200px", left: '4000px', top: '100px'}}/>
         <Yellow className="pos-rlt" style={state.random2} />
@@ -81,6 +81,14 @@ const Template: Story<any> = (args) => {
         <Dark />
         <Yellow />
       </Wrapper>
+    </Fragment>
+  )
+}
+
+const Template: Story<any> = (args) => {
+  return (
+    <MiniMapContextWrapper useBodyScroll={true}>
+      <Nodes />
     </MiniMapContextWrapper>
   )
 };

@@ -13,19 +13,26 @@ const MiniMap = ({
   onMove,
   nodes,
   nodeRender = Node,
+  style,
 }: InternalMiniMapProps) => {
   const NodeRender = nodeRender;
   const viewportRef = useRef<any>(null);
   const { position, setPosition, onMouseDown, onMouseMove, onMouseUp } = useDrag({
     startPosition: positionProp,
     positionRule: {
-      left: { min: viewportWidth - realWidth, max: 0 },
-      top: { min: viewportHeight - realHeight, max: 0 },
+      left: { min: 0, max: viewportWidth - realWidth },
+      top: { min: 0, max: viewportHeight - realHeight },
     },
   });
 
   useEffect(() => {
-    setPosition(positionProp)
+    console.log('positionProp', positionProp)
+    setPosition({
+      left: positionProp.left < viewportWidth - realWidth ? 
+        positionProp.left : viewportWidth - realWidth,
+      top: positionProp.top < viewportHeight - realHeight ? 
+        positionProp.top : viewportHeight - realHeight,
+    })
   }, [positionProp]);
 
   const handleMouseDown = (event: any) => {
@@ -33,39 +40,47 @@ const MiniMap = ({
     onMouseDown(event);
   };
 
-  const handleMouseUp = () => {
+  const handleMouseUp = (event) => {
     onMouseUp(event);
   };
 
   const handleMouseMove = (event: any) => {
     const moveXY = onMouseMove(event);
-    console.log(moveXY)
-    onMove && onMove(moveXY);
+    moveXY && onMove && onMove(moveXY);
   };
 
   return (
     <div 
-      className="overflowed-minimap-wrap"
+      className="overflowed-minimap"
       style={{
-        width: `${viewportWidth}px`,
-        height: `${viewportHeight}px`,
+        width: `${viewportWidth + 8}px`,
+        height: `${viewportHeight + 8}px`,
+        ...style,
       }}
     >
-      <div
-        className="overflowed-minimap"
+      <div 
+        className="overflowed-minimap-content"
         style={{
-          width: `${realWidth}px`,
-          height: `${realHeight}px`,
-          ...position,
+          width: `${viewportWidth}px`,
+          height: `${viewportHeight}px`,
         }}
-        onMouseDown={handleMouseDown}
-        onTouchStart={handleMouseDown}
-        onTouchMove={handleMouseMove}
-        onMouseMove={handleMouseMove}
-        onTouchEnd={handleMouseUp}
-        onMouseUp={handleMouseUp}
-        ref={viewportRef}
       >
+        <div
+          className="overflowed-minimap-viewport"
+          style={{
+            width: `${realWidth}px`,
+            height: `${realHeight}px`,
+            ...position,
+          }}
+          onMouseDown={handleMouseDown}
+          onTouchStart={handleMouseDown}
+          onTouchMove={handleMouseMove}
+          onMouseMove={handleMouseMove}
+          onTouchEnd={handleMouseUp}
+          onMouseUp={handleMouseUp}
+          ref={viewportRef}
+        />
+        
         {(nodes || []).map((node, index) => {
           return (
             <NodeRender

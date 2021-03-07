@@ -1,14 +1,17 @@
-.overflowed-minimap-wrap {
-  display: inline-block;
+.overflowed-minimap {
+  display: block;
   padding: 4px;
   background: rgba(24, 129, 225, 0.1);
-  border: 1px solid #1881E1;
-  position: relative;
-  overflow: hidden;
+  border: 1px solid #ccc;
 }
 
-.overflowed-minimap {
+.overflowed-minimap-content {
+  position: relative;
+}
+
+.overflowed-minimap-viewport {
   position: absolute;
-  z-index: 1;
+  z-index: 333;
   margin: 4px;
+  border: 1px solid #1881E1;
 }

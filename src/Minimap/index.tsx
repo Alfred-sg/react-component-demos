@@ -1,15 +1,19 @@
 export { default as default } from './MiniMap';
-export { MiniMapContext as MiniMapContext } from './context';
+export { MiniMapContext as MiniMapContext, Subscriber } from './context';
 export { useMiniMap as useMiniMap } from './context';
 export { default as Wrapper } from './Wrapper';
-import { MiniMapContext, useMiniMap } from './context';
+import { MiniMapContext, useMiniMap, Subscriber } from './context';
 
 export const MiniMapContextWrapper = ({
   useBodyScroll,
   children,
-}: any) => {
+}: {
+  useBodyScroll?: boolean;
+  children: React.ReactNode;
+}) => {
   const minimap = useMiniMap({
     useBodyScroll,
+    subsciber: new Subscriber(),
   });
 
   return (

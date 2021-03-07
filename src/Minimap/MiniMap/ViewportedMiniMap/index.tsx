@@ -13,6 +13,7 @@ const MiniMap = ({
   onMove,
   nodes,
   nodeRender = Node,
+  style,
 }: InternalMiniMapProps, ref) => {
   const NodeRender = nodeRender;
   const viewportRef = useRef<any>(null);
@@ -33,13 +34,13 @@ const MiniMap = ({
     onMouseDown(event);
   };
 
-  const handleMouseUp = () => {
+  const handleMouseUp = (event) => {
     onMouseUp(event);
   };
 
   const handleMouseMove = (event: any) => {
     const moveXY = onMouseMove(event);
-    onMove && onMove(moveXY);
+    moveXY && onMove && onMove(moveXY);
   };
 
   return (
@@ -48,6 +49,7 @@ const MiniMap = ({
       style={{
         width: `${realWidth}px`,
         height: `${realHeight}px`,
+        ...style,
       }}
     >
       <div

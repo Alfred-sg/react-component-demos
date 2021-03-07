@@ -5,6 +5,7 @@ export interface InternalMiniMapProps {
   realWidth?: number /** in pixel */;
   realHeight?: number /** in pixel */;
   position?: { left: number; top: number };
+  style?: React.CSSProperties;
   onMove?: (move: { x: number, y: number }) => void;
   nodes: MiniMapNode[];
   nodeRender?: React.FunctionComponent<MiniMapNodeProps> | React.ComponentClass<MiniMapNodeProps>;
@@ -22,8 +23,10 @@ export interface MiniMapProps {
 };
 
 export interface SourceData {
-  ratioX: number; 
+  ratioX: number; // 内部节点与容器的比例
   ratioY: number; 
+  viewportRatioX: number; // 视窗与容器的比例
+  viewportRatioY: number;
   offsetX: number; 
   offsetY: number; 
   width?: number; 

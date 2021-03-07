@@ -53,12 +53,13 @@ const useMouseDrag = (options?: Options) => {
   const [position, setPosition] = useState(startPosition || { left: 0, top: 0 });
   const positionRuleRef = useRef<PositionRule>(positionRule || {} as PositionRule);
 
-  const onMouseDown = (event: any) => {
-    const optResult = onMouseDownOpt && onMouseDownOpt(event);
-    if (optResult === false) return;
-
+  const onMouseDown = (event: React.SyntheticEvent) => {
     event.preventDefault();
     event.stopPropagation();
+    const optResult = onMouseDownOpt && onMouseDownOpt(event);
+    console.log(event)
+    console.log(optResult)
+    if (optResult === false) return;
 
     const realEvent = getRealEvent(event);
     downingRef.current = true;
@@ -70,26 +71,23 @@ const useMouseDrag = (options?: Options) => {
     onMouseMove(event);
   }
 
-  const onMouseUp = (event: any) => {
-    const optResult = onMouseUpOpt && onMouseUpOpt(event);
-    if (optResult === false) return;
-
+  const onMouseUp = (event: React.SyntheticEvent) => {
     event.preventDefault();
     event.stopPropagation();
+    const optResult = onMouseUpOpt && onMouseUpOpt(event);
+    if (optResult === false) return;
 
     downingRef.current = false;
     movedRef.current = false;
     startXYRef.current = defaultXY;
   }
 
-  const onMouseMove = (event: any) => {
-    const optResult = onMouseMoveOpt && onMouseMoveOpt(event);
-    if (optResult === false) return;
-
-    if (!downingRef.current) return;
-
+  const onMouseMove = (event: React.SyntheticEvent) => {
     event.preventDefault();
     event.stopPropagation();
+    const optResult = onMouseMoveOpt && onMouseMoveOpt(event);
+    if (optResult === false) return;
+    if (!downingRef.current) return;
 
     movedRef.current = true;
 
@@ -100,6 +98,9 @@ const useMouseDrag = (options?: Options) => {
     };
 
     setMoveXY(moveXY);
+    requestAnimationFrame(() => {
+      move(moveXY.x, moveXY.y);
+    });
     return moveXY;
   };
 
@@ -128,14 +129,6 @@ const useMouseDrag = (options?: Options) => {
       top: newTop,
     })
   }, [position, positionRuleRef]);
-
-  useEffect(() => {
-    if (movedRef.current){
-      requestAnimationFrame(() => {
-        move(moveXY.x, moveXY.y);
-      });
-    };
-  }, [moveXY, movedRef]);
 
   const setPositionRule = (positionRule: PositionRule) => {
     positionRuleRef.current = positionRule;

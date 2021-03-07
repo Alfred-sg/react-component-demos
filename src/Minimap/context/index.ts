@@ -1,25 +1,47 @@
 import { useRef, createContext, useContext, useEffect, useState } from 'react';
 
 interface MiniMapContext {
-  source: HTMLElement;
-  setSource: (source: HTMLElement) => void;
-  sourceRef: any;
   useBodyScroll?: boolean;
   bodyScrollXY: {
     x: number; 
     y: number;
   };
+  subsciber: Subscriber;
 };
 
 type Options = { 
   useBodyScroll: boolean;
+  subsciber: Subscriber;
 };
 
+export class Subscriber {
+  source: HTMLElement | undefined;
+  subscibers: ((source: HTMLElement) => any)[] = [];
+
+  subscribe = (subsciber: (source: HTMLElement) => any) => {
+    this.subscibers.push(subsciber);
+
+    return () => {
+      this.removeSubscriber(subsciber);
+    };
+  };
+
+  removeSubscriber = (subsciber: (source: HTMLElement) => any) => {
+    this.subscibers = this.subscibers.filter(cb => subsciber != cb);
+  }; 
+
+  notify = () => {
+    if (this.source){
+      this.subscibers.map(subsciber => {
+        subsciber(this.source);
+      });
+    }
+  }
+}
+
 export const useMiniMap = (options?: Options): MiniMapContext => {
-  const { useBodyScroll } = options || {} as Options;
-  const useBodyScrollRef = useRef<{ useBodyScroll?: boolean }>({ useBodyScroll });
-  const sourceRef = useRef<HTMLElement>(null);
-  const [source, setSource] = useState(null);
+  const { useBodyScroll, subsciber } = options || {} as Options;
+  const useBodyScrollRef = useRef<boolean>(!!useBodyScroll);
   const [bodyScrollXY, setBodyScrollXY] = useState({x: 0, y: 0});
 
   useEffect(() => {
@@ -39,18 +61,10 @@ export const useMiniMap = (options?: Options): MiniMapContext => {
     });
   };
 
-  useEffect(() => {
-    console.log(123)
-    setSource(sourceRef.current);
-  }, [sourceRef]);
-
-  console.log('source', source)
   return {
-    source,
-    setSource,
-    sourceRef,
-    useBodyScroll: !useBodyScrollRef.current,
+    useBodyScroll: !!useBodyScrollRef.current,
     bodyScrollXY,
+    subsciber,
   };
 };
 

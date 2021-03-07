@@ -9,20 +9,26 @@ const MiniMap = forwardRef(({
   useBodyScroll: useBodyScrollProp,
   selector,
   width = 200,
-  height = 200,
+  height = 120,
   ...rest
 }: MiniMapProps, ref) => {
   const minimap = useMiniMapContext();
-  const source = useMemo(() => {
-    console.log(324)
-    return sourceProp || minimap.source;
-  }, [sourceProp, minimap.sourceRef]);
-  const useBodyScroll = useBodyScrollProp || minimap.useBodyScroll;
-  console.log(source)
+  const sourceRef = useRef<HTMLElement>(sourceProp);
+  const useBodyScroll = useBodyScrollProp !== undefined ? 
+    useBodyScrollProp : minimap.useBodyScroll;
 
   useEffect(() => {
-    console.log(3333,minimap.source)
-  }, [minimap.source]);
+    const removeSubscriber = minimap.subsciber.subscribe(() => {
+      if (minimap.subsciber.source){
+        sourceRef.current = minimap.subsciber.source;
+        freshViewportPosition();
+        freshRectAndNodes();
+      };
+    });
+    minimap.subsciber.notify();
+
+    return removeSubscriber;
+  }, []);
 
   useEffect(() => {
     if (useBodyScroll){
@@ -31,7 +37,9 @@ const MiniMap = forwardRef(({
   }, [useBodyScroll, minimap.bodyScrollXY]);
 
   const sourceDataRef = useRef<SourceData>({ 
-    ratioX: 1, ratioY: 1, offsetX: 0, offsetY: 0,
+    ratioX: 1, ratioY: 1, 
+    viewportRatioX: 1, viewportRatioY: 1,
+    offsetX: 0, offsetY: 0,
   });
   const [nodes, setNodes] = useState<MiniMapNode[]>([]);
   const [realWidthHeight, setRealWidthHeight] = useState({ width, height });
@@ -52,10 +60,10 @@ const MiniMap = forwardRef(({
 
   useLayoutEffect(() => {
     freshRectAndNodes();
-  }, [source]);
+  }, [sourceRef]);
 
   const freshRectAndNodes = () => {
-    if (!source) return;
+    if (!sourceRef.current) return;
 
     requestAnimationFrame(() => {
       freshSourceData();
@@ -67,20 +75,27 @@ const MiniMap = forwardRef(({
   const freshSourceData = () => {
     let ratioX = 1;
     let ratioY = 1;
+    let viewportRatioX = 1;
+    let viewportRatioY = 1;
     let offsetX = 0;
     let offsetY = 0;
 
-    const sourceRect = source.getBoundingClientRect();
+    const sourceRect = sourceRef.current.getBoundingClientRect();
 
     if (useBodyScroll){
-      ratioX = window.screen.availWidth < sourceRect.width ? 
+      ratioX = width < sourceRect.width ? 
+        width / sourceRect.width : 1;
+      ratioY = height < sourceRect.height ? 
+        height / sourceRect.height : 1;
+      viewportRatioX = window.screen.availWidth < sourceRect.width ? 
         window.screen.availWidth / sourceRect.width : 1;
-      ratioY = window.screen.availHeight < sourceRect.height ? 
+      viewportRatioY = window.screen.availHeight < sourceRect.height ? 
         window.screen.availHeight / sourceRect.height : 1;
 
       offsetX = document.body.scrollLeft - sourceRect.left;
       offsetY = document.body.scrollTop - sourceRect.top;
     } else {
+      const source = sourceRef.current;
       const parent = source && source.parentNode as HTMLElement;
       if (!source || !parent) return;
   
@@ -98,6 +113,8 @@ const MiniMap = forwardRef(({
     sourceDataRef.current = {
       ratioX,
       ratioY,
+      viewportRatioX,
+      viewportRatioY,
       offsetX,
       offsetY,
       width: sourceRect.width,
@@ -106,20 +123,20 @@ const MiniMap = forwardRef(({
   }
 
   const freshRealWidthHeight = useCallback(() => {
-    const { ratioX, ratioY } = sourceDataRef.current;
+    const { viewportRatioX, viewportRatioY } = sourceDataRef.current;
     setRealWidthHeight({
-      width: width * ratioX,
-      height: height * ratioY,
+      width: width * viewportRatioX,
+      height: height * viewportRatioY,
     });
   }, [sourceDataRef]);
 
   const freshNodes = useCallback(() => {
-    if (!source) return;
+    if (!sourceRef.current) return;
 
     const { ratioX, ratioY, offsetX, offsetY } = sourceDataRef.current;
     let nodes: MiniMapNode[] = [];
     
-    source.querySelectorAll(selector).forEach((node: HTMLElement) => {
+    sourceRef.current.querySelectorAll(selector).forEach((node: HTMLElement) => {
       const nodeRect = node.getBoundingClientRect();
 
       // 宽高为 1，以线渲染
@@ -141,7 +158,7 @@ const MiniMap = forwardRef(({
   }, [sourceDataRef]);
 
   const freshViewportPosition = () => {
-    if (!source) return;
+    if (!sourceRef.current) return;
 
     freshSourceData();
 
@@ -151,12 +168,13 @@ const MiniMap = forwardRef(({
     } = sourceDataRef.current;
 
     setPosition({
-      left: - offsetX / sourceWidth * width,
-      top: - offsetY / sourceHeight * height,
+      left: offsetX / sourceWidth * width,
+      top: offsetY / sourceHeight * height,
     });
   };
 
   const handleMove = ({ x, y }: { x: number; y: number; }) => {
+    const source = sourceRef.current;
     if (useBodyScroll){
       const { width, height, top, left } = source.getBoundingClientRect();
       window.scrollTo(
@@ -181,6 +199,7 @@ const MiniMap = forwardRef(({
       position={position}
       onMove={handleMove} 
       nodes={nodes} 
+      style={useBodyScroll ? { position: 'fixed', top: 0, right: 0, zIndex: 222 } : {}}
       {...rest}
     />
   )

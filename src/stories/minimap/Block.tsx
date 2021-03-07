@@ -1,8 +1,13 @@
 import React, { Component } from 'react';
 
-const DEBUG = false
+const DEBUG = false;
 
-export class Dark extends Component {
+type Props = {
+  className?: string;
+  style?: React.CSSProperties;
+};
+
+export class Dark extends Component<Props> {
   render() {
     if (DEBUG)
       console.log("render Dark")
@@ -16,7 +21,7 @@ export class Dark extends Component {
   }
 }
 
-export class Red extends Component {
+export class Red extends Component<Props> {
   render() {
     if (DEBUG)
       console.log("render Red")
@@ -32,7 +37,7 @@ export class Red extends Component {
   }
 }
 
-export class Yellow extends Component {
+export class Yellow extends Component<Props> {
   render() {
     if (DEBUG)
       console.log("render Yellow")

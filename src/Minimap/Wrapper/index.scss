@@ -8,5 +8,7 @@
 
   .minmap-scroll-content {
     position: absolute;
+    width: 100%;
+    overflow: hidden;
   }
 }
