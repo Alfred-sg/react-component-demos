@@ -1,0 +1,29 @@
+.slider {
+  display: inline-block;
+  position: relative;
+  width: 115px;
+  height: 15px;
+  margin: 0 7.5px;
+
+  .bar {
+    position: absolute;
+    top: 4.5px;
+    left: 7.5px;
+    width: 100px;
+    height: 6px;
+    background: #1881E1;
+    border-radius: 3px;
+    opacity: .23;
+  }
+
+  .icon {
+    display: inline-block;
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 15px;
+    height: 15px;
+    background: #1881E1;
+    border-radius: 7.5px;
+  }
+}

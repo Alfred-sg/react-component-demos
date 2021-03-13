@@ -57,8 +57,6 @@ const useMouseDrag = (options?: Options) => {
     event.preventDefault();
     event.stopPropagation();
     const optResult = onMouseDownOpt && onMouseDownOpt(event);
-    console.log(event)
-    console.log(optResult)
     if (optResult === false) return;
 
     const realEvent = getRealEvent(event);
@@ -109,18 +107,18 @@ const useMouseDrag = (options?: Options) => {
     const { left: leftRule, top: topRule } = positionRuleRef.current;
 
     let newLeft = left + x;
-    if (leftRule && leftRule.min){
+    if (leftRule && leftRule.min !== undefined){
       if (newLeft < leftRule.min) newLeft = leftRule.min;
     };
-    if (leftRule && leftRule.max){
+    if (leftRule && leftRule.max !== undefined){
       if (newLeft > leftRule.max) newLeft = leftRule.max;
     };
 
     let newTop = top + x;
-    if (topRule && topRule.min){
+    if (topRule && topRule.min !== undefined){
       if (newTop < topRule.min) newTop = topRule.min;
     };
-    if (topRule && topRule.max){
+    if (topRule && topRule.max !== undefined){
       if (newTop > topRule.max) newTop = topRule.max;
     };
 

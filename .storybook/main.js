@@ -6,11 +6,11 @@ module.exports = {
     "../src/**/*.stories.@(js|jsx|ts|tsx)"
   ],
   "addons": [
+    "@storybook/addon-docs",
     "@storybook/addon-controls",
     "@storybook/addon-actions",
     "@storybook/addon-links",
     "@storybook/addon-essentials",
-    "@storybook/addon-docs",
   ],
 
   // https://storybook.js.org/docs/react/configure/webpack
