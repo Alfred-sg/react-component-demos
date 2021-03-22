@@ -25,6 +25,7 @@
     "@storybook/react": "^6.1.17",
     "@svgr/webpack": "^5.5.0",
     "@types/react-pdf": "^5.0.1",
+    "braft-editor": "^2.3.9",
     "css-loader": "^5.0.2",
     "father": "^2.30.1",
     "react": "^17.0.1",
