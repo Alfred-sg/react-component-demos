@@ -14,7 +14,7 @@ import {
 import Editor from './Editor';
 
 export default {
-  title: 'react-demos/braft-editor',
+  title: 'react-demos/draft-js',
   component: Editor,
   argTypes: {
   },
@@ -25,9 +25,14 @@ export default {
       },
       page: () => (
         <>
-          <Title>braft-editor 富文本编辑器</Title>
+          <Title>draft-js 富文本编辑器</Title>
           <Subtitle />
-          <Description />
+          <Description>
+            draft-js 表现与 input 受控组件相似。
+            editorState 控制值（实际为内部状态的快照），onChange 监听变更
+            当编辑器内容变更时，draft-js 会创建新的 editorState 对象
+            内容变更（包含文本选中内容变更）都可以通过 onChange 监听
+          </Description>
           <Primary />
           {/* ArgsTable 参数列表 */}
           <ArgsTable story={PRIMARY_STORY} />
