@@ -11,7 +11,7 @@ import {
   Primary,
 } from '@storybook/addon-docs/blocks';
 
-import Editor from './Editor';
+import Editor from '../../DraftEditor';
 
 export default {
   title: 'react-demos/draft-js',
