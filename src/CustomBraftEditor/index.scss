@@ -1,0 +1,13 @@
+.custom-braft-editor-wrapper {
+  display: flex;
+
+  .custom-braft-editor {
+    flex-grow: 1;
+    flex-shrink: 0;
+  }
+
+  .custom-braft-editor-category {
+    flex-grow: 0;
+    flex-shrink: 0;
+  }
+}

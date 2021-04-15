@@ -1,0 +1,11 @@
+.custom-braft-editor-tree {
+  width: 200px;
+  padding: 0 20px;
+
+  &-header {
+    height: 46px;
+    line-height: 46px;
+    box-shadow: inset 0 -1px 0 0 rgb(0 0 0 / 20%);
+    padding: 0 10px;
+  }
+}

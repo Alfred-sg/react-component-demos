@@ -11,7 +11,7 @@ import {
   Primary,
 } from '@storybook/addon-docs/blocks';
 
-import Editor from './Editor';
+import Editor from '../../CustomBraftEditor';
 
 export default {
   title: 'react-demos/custom-braft-editor',
